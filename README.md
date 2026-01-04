@@ -22,6 +22,12 @@ pip install -r requirements.txt
 ```
 
 4. 运行
+```bash
+fastapi dev app/main.py
+```
+
+5、访问文档
+[Swagger UI](http://127.0.0.1:8000/docs)
 
 ## 开发
 

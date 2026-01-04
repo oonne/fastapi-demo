@@ -1,6 +1,12 @@
 # Python 虚拟环境
 .venv/
 
+# Python 缓存文件
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
 # 操作系统文件
 .DS_Store
 Thumbs.db
