@@ -1,43 +1,5 @@
 # Python 虚拟环境
-venv/
-env/
-ENV/
 .venv/
-.ENV/
-
-# Python 缓存文件
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-
-# 分发/打包
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-
-# PyCharm
-.idea/
-
-# VS Code
-.vscode/
-
-# 环境变量文件
-.env
-.env.local
 
 # 操作系统文件
 .DS_Store
