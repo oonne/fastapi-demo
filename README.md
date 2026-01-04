@@ -1,6 +1,9 @@
 # fastapi-demo
 FastApi DEMO
 
+## 功能
+* Swagger UI
+
 ## 使用
 
 1. 创建虚拟环境：
