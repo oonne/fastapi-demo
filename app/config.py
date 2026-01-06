@@ -11,8 +11,8 @@ class Settings(BaseSettings):
     
     # 配置读取环境变量
     model_config = SettingsConfigDict(
-        env_file=".env",  # 指定 .env 文件路径（相对于项目根目录）
-        env_file_encoding="utf-8",  # .env 文件编码
+        env_file=".env.local",  # 指定 .env 文件
+        env_file_encoding="utf-8",
         case_sensitive=False,  # 环境变量名不区分大小写（ENV_NAME 和 env_name 都可以）
         extra="ignore",  # 忽略 .env 文件中未定义的变量
     )
