@@ -1,0 +1,24 @@
+"""
+应用配置模块
+使用 pydantic-settings 管理环境变量
+"""
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    # 应用配置
+    env_name: str = "prod"
+    
+    # 配置读取环境变量
+    model_config = SettingsConfigDict(
+        env_file=".env",  # 指定 .env 文件路径（相对于项目根目录）
+        env_file_encoding="utf-8",  # .env 文件编码
+        case_sensitive=False,  # 环境变量名不区分大小写（ENV_NAME 和 env_name 都可以）
+        extra="ignore",  # 忽略 .env 文件中未定义的变量
+    )
+
+
+# 创建全局配置实例
+# 当这个模块被导入时，会自动读取 .env 文件并创建配置对象
+settings = Settings()
+
