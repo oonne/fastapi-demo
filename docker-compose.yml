@@ -1,10 +1,10 @@
-name: fastapi-demo
+name: fastapi_demo
 
 services:
   # 应用服务配置
-  fastapi-demo:
-    image: fastapi-demo
-    container_name: fastapi-demo  # 容器名称
+  fastapi_demo:
+    image: fastapi_demo
+    container_name: fastapi_demo  # 容器名称
     platform: linux/amd64 # 构建后到服务端使用
     build:
       context: .  # 使用当前目录作为构建上下文
@@ -17,4 +17,6 @@ services:
       - DB_HOST=host.docker.internal 
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    volumes:
+      - /data/logs/fastapi_demo:/app/logs # 挂载日志目录
 
