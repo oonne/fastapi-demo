@@ -26,11 +26,11 @@ pip install -r requirements.txt
 
 4. 运行
 ```bash
-fastapi dev app/main.py
+fastapi dev app/main.py --port 10024
 ```
 
 5、访问文档
-[Swagger UI](http://127.0.0.1:8000/docs)
+[Swagger UI](http://127.0.0.1:10024/docs)
 
 ## 开发
 
