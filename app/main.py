@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from app.routers import demo, items
-from app.config import settings
+from app.config.config import settings
 
 app = FastAPI()
 
