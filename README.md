@@ -3,6 +3,7 @@ FastApi DEMO
 
 ## 功能
 * Swagger UI
+* 输出日志
 
 ## 使用
 

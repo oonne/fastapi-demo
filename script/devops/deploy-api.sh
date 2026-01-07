@@ -56,9 +56,9 @@ else
 fi
 
 # 停止api服务
-cd /data/bin/api
-docker compose down
-echo "api 已停止"
+cd /data/bin
+sh fastapi-demo-stop.sh
+echo "fastapi-demo 已停止"
 
 # 删除旧镜像的 latest 标签
 if docker image inspect fastapi_demo:latest >/dev/null 2>&1; then
@@ -83,7 +83,7 @@ echo "等待服务启动..."
 sleep 5
 
 # 检查服务是否正常运行
-cd /data/bin/fast
+cd /data/bin/fastapi-demo
 if docker compose ps | grep -q "Up"; then
     echo "✅ 新服务已成功启动"
     
@@ -108,4 +108,4 @@ fi
 exit
 EOF
 
-echo "友单API已经更新！"
+echo "FastAPI Demo已经更新！"
