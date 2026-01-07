@@ -2,6 +2,7 @@
 FastApi DEMO
 
 ## 功能
+* 自动部署脚本
 * Swagger UI
 * 输出日志
 
