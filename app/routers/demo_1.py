@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from app.utils.logger import get_logger
-from app.utils.response import success_response, error_response
+from app.utils.response import success_response
 from app.schemas.response import StandardResponse
 
 router = APIRouter()
