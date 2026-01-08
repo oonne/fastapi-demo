@@ -1,7 +1,8 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from app.utils.logger import get_logger
 from app.utils.response import success_response
+from app.utils.auth import verify_api_key
 from app.schemas.response import StandardResponse
 
 router = APIRouter()
@@ -14,7 +15,7 @@ class DemoRequest(BaseModel):
 
 
 @router.post("/", response_model=StandardResponse)
-async def demo_post(request: DemoRequest):
+async def demo_post(request: DemoRequest, api_key: str = Depends(verify_api_key)):
     """
     Demo-1 POST 请求示例
 

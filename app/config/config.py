@@ -9,6 +9,10 @@ class Settings(BaseSettings):
     # 应用配置
     env_name: str = "prod"
     
+    # API Key 认证配置
+    api_key: str = ""  # API Key，从环境变量读取，默认空字符串（生产环境必须设置）
+    api_key_header_name: str = "X-API-Key"  # API Key 在 Header 中的名称
+    
     # 配置读取环境变量
     model_config = SettingsConfigDict(
         env_file=".env.local",  # 指定 .env 文件

@@ -9,3 +9,7 @@
 class ErrorCode:
     # 未知错误
     UNKNOWN_ERROR = 10000
+    
+    # 认证相关错误
+    AUTH_MISSING_API_KEY = 10001  # 缺少 API Key
+    AUTH_INVALID_API_KEY = 10002  # API Key 无效

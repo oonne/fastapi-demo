@@ -2,9 +2,11 @@
 FastApi DEMO
 
 ## 功能
-* 自动部署脚本
 * Swagger UI
 * 输出日志
+* 格式化返回
+* API Key 认证
+* 自动部署脚本
 
 ## 使用
 
