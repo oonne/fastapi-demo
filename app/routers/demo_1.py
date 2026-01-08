@@ -23,7 +23,6 @@ async def demo_post(request: DemoRequest):
     返回标准格式响应，包含 code、message、data 字段
     """
     logger.info(f"收到 POST 请求，数据: {request.data}")
-    # return HTTPException(status_code=500, detail=f"处理请求时出错: {str(e)}")
     try:
         # 业务逻辑处理
         processed_data = request.data
