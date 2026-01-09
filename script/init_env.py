@@ -20,9 +20,10 @@ def init_env():
     env_local_content = env_local_content.replace('ENV_NAME = local', 'ENV_NAME = prod')
     # 生成32位随机API_KEY
     env_local_content = re.sub(
-        r'API_KEY\s*=\s*.+',
-        f'API_KEY = {secrets.token_hex(32)}',
+        r'API_KEY\s*=\s*.*',
+        f'API_KEY={secrets.token_hex(32)}',
         env_local_content,
+        flags=re.MULTILINE,
     )
     # 写入.env文件
     with open('.env', 'w', encoding='utf8') as f:

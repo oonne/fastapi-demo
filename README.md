@@ -31,7 +31,7 @@ pip install -r requirements.txt
 
 4. 初始化环境变量：
 ```bash
-python script/init_env.py
+python3 script/init_env.py
 ```
 
 5. 运行
