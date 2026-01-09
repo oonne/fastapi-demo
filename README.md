@@ -29,12 +29,17 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-4. 运行
+4. 初始化环境变量：
+```bash
+python script/init_env.py
+```
+
+5. 运行
 ```bash
 fastapi dev app/main.py --port 10024
 ```
 
-5、访问文档
+6. 访问文档
 [Swagger UI](http://127.0.0.1:10024/docs)
 
 ## 开发
