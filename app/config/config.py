@@ -11,7 +11,14 @@ class Settings(BaseSettings):
     
     # API Key 认证配置
     api_key: str = ""  # API Key，从环境变量读取，默认空字符串（生产环境必须设置）
-    api_key_header_name: str = "X-API-Key"  # API Key 在 Header 中的名称
+    
+    # 任务管理配置
+    max_concurrent_tasks: int = 0  # 最大并发任务数，0表示不限制
+    callback_timeout: int = 30  # 回调请求超时时间（秒）
+    
+    # 回调配置
+    callback_domain: str = ""  # 回调域名，从环境变量 CALLBACK_DOMAIN 读取
+    callback_key: str = ""  # 回调API Key，从环境变量 CALLBACK_KEY 读取
     
     # 配置读取环境变量
     model_config = SettingsConfigDict(

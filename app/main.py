@@ -4,10 +4,15 @@ from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from app.utils.logger import get_logger
 from app.config.config import settings
-from app.routers import demo_1, demo_2
+from app.routers import task
 from app.utils.logger import setup_logging
 from app.utils.response import error_response
 from app.utils.exceptions import CustomException
+from app.services.task_executor import task_executor
+from app.tasks.text_to_order import TextToOrderTask
+from app.tasks.image_to_order import ImageToOrderTask
+from app.tasks.voice_to_order import VoiceToOrderTask
+from app.constant.task_type import TaskType
 
 # 初始化日志配置（需要在应用创建之前执行，以便 Uvicorn 使用配置）
 setup_logging(
@@ -21,8 +26,16 @@ logger = get_logger("app")
 app = FastAPI()
 
 # 注册路由
-app.include_router(demo_1.router, prefix="/api/demo-1", tags=["demo-1"])
-app.include_router(demo_2.router, prefix="/api/demo-2", tags=["demo-2"])
+app.include_router(task.router, prefix="/task", tags=["task"])
+
+# 初始化任务执行器：注册任务类型
+task_executor.register_task_type(TaskType.TEXT_TO_ORDER, TextToOrderTask)
+task_executor.register_task_type(TaskType.IMAGE_TO_ORDER, ImageToOrderTask)
+task_executor.register_task_type(TaskType.VOICE_TO_ORDER, VoiceToOrderTask)
+logger.info("任务类型注册完成:")
+logger.info(f"  - {TaskType.TEXT_TO_ORDER.value}: {TaskType.TEXT_TO_ORDER.name_cn}")
+logger.info(f"  - {TaskType.IMAGE_TO_ORDER.value}: {TaskType.IMAGE_TO_ORDER.name_cn}")
+logger.info(f"  - {TaskType.VOICE_TO_ORDER.value}: {TaskType.VOICE_TO_ORDER.name_cn}")
 
 
 """
@@ -68,6 +81,23 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         error_messages.append(f"{field}: {message}")
     
     error_msg = "; ".join(error_messages) if error_messages else "请求参数验证失败"
+    
+    # 记录请求详细信息用于调试
+    try:
+        # 读取请求体
+        body = await request.body()
+        body_str = body.decode('utf-8') if body else ""
+        
+        # 记录请求信息
+        logger.warning(
+            f"请求参数验证失败 - URL: {request.url.path}, "
+            f"Method: {request.method}, "
+            f"Headers: {dict(request.headers)}, "
+            f"Body: {body_str}, "
+            f"Errors: {error_messages}"
+        )
+    except Exception as e:
+        logger.warning(f"记录请求信息时出错: {str(e)}")
     
     return JSONResponse(
         status_code=400,

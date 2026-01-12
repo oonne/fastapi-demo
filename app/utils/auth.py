@@ -13,7 +13,7 @@ logger = get_logger("app")
 
 # 定义 API Key Header
 api_key_header = APIKeyHeader(
-    name=settings.api_key_header_name,
+    name='x-api-key',
     auto_error=False  # 设置为 False，手动处理错误以返回标准格式
 )
 
