@@ -49,7 +49,6 @@ class TextToOrderTask(BaseTask):
             )
         
         # 模拟业务处理
-        await asyncio.sleep(1)
         await self.update_progress(ProgressUpdate(
             info="正在解析文本内容...",
             status=TaskStatus.RUNNING
@@ -61,8 +60,6 @@ class TextToOrderTask(BaseTask):
             model_key="qwen-turbo"  # 指定使用 qwen-turbo 模型
         )
         print('result', result)
-
-        await asyncio.sleep(1)
         
         # 最终进度更新
         await self.update_progress(ProgressUpdate(info="处理完成"))
