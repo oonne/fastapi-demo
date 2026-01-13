@@ -2,6 +2,8 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Any
 from app.services.task_manager import TaskManager
+from app.services.callback_service import callback_service
+from app.schemas.task import ProgressUpdate
 
 
 class BaseTask(ABC):
@@ -25,14 +27,31 @@ class BaseTask(ABC):
         self.task_params = task_params
         self.task_manager = task_manager
     
-    async def update_progress(self, info: str) -> None:
+    async def update_progress(self, progress: ProgressUpdate) -> None:
         """
-        更新任务进度
+        更新任务进度，可选择同时更新状态
         
         Args:
-            info: 进度信息
+            progress: 进度更新参数对象
         """
-        await self.task_manager.update_progress(self.task_id, info)
+        # 如果提供了状态，先更新状态
+        if progress.status is not None:
+            await self.task_manager.update_status(self.task_id, progress.status)
+        
+        # 更新进度
+        await self.task_manager.update_progress(self.task_id, progress.info)
+        
+        # 触发回调
+        if progress.trigger_callback:
+            # 获取当前任务状态（如果没提供status参数，使用当前状态）
+            task = await self.task_manager.get_task(self.task_id)
+            if task:
+                current_status = progress.status if progress.status is not None else task.status
+                await callback_service.callback(
+                    task_id=self.task_id,
+                    status=current_status,
+                    progress=progress.info
+                )
     
     @abstractmethod
     async def execute(self) -> Dict[str, Any]:

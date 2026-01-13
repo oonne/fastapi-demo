@@ -27,14 +27,14 @@ class CallbackService:
         
         Args:
             task_id: 任务ID
-            status: 任务状态（SUCCESS 或 FAILED）
+            status: 任务状态
             output: 任务输出（成功时为结果，失败时为包含error的字典）
             progress: 任务进度信息
         """
         # 构建回调数据
         callback_data = {
-            "task_id": task_id,
-            "status": status.value,
+            "taskId": task_id,
+            "taskStatus": status.value,
             "progress": progress,
             "output": output
         }

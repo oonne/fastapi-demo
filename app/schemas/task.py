@@ -111,3 +111,10 @@ class TaskGetDetailRequest(BaseModel):
 class TaskGetListRequest(BaseModel):
     """获取任务列表请求模型"""
     status: Optional[str] = Field(None, description="任务状态筛选，可选值: PENDING, RUNNING, 成功, FAILED")
+
+
+class ProgressUpdate(BaseModel):
+    """进度更新参数模型"""
+    info: str = Field(..., description="进度信息")
+    status: Optional[TaskStatus] = Field(None, description="可选的任务状态，如果提供则同时更新状态")
+    trigger_callback: bool = Field(True, description="是否触发回调，默认为True")

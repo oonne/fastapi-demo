@@ -2,6 +2,8 @@
 import asyncio
 from typing import Dict, Any
 from app.tasks.base import BaseTask
+from app.schemas.task import ProgressUpdate
+from app.constant.task_status import TaskStatus
 from app.utils.logger import get_logger
 
 logger = get_logger("app")
@@ -19,14 +21,15 @@ class TextToOrderTask(BaseTask):
         """
         logger.info(f"开始执行文本转订单任务: task_id={self.task_id}")
         
-        # 更新进度
-        await self.update_progress("开始处理...")
+        await asyncio.sleep(1)
+        await self.update_progress(ProgressUpdate(
+            info="正在解析文本内容...",
+            status=TaskStatus.RUNNING
+        ))
+        await asyncio.sleep(1)
         
-        # 简单的延时测试异步处理逻辑
-        await asyncio.sleep(2)
-        
-        # 更新进度
-        await self.update_progress("处理完成")
+        # 最终进度更新
+        await self.update_progress(ProgressUpdate(info="处理完成"))
         
         logger.info(f"文本转订单任务完成: task_id={self.task_id}")
         
