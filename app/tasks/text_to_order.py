@@ -32,22 +32,27 @@ class TextToOrderTask(BaseTask):
         
         # 获取输入参数
         text = self.task_params.get("text", "")
+        merchantId = self.task_params.get("merchantId", "")
+        customerId = self.task_params.get("customerId", "")
         
-        # 异常捕获示例
+        # 校验输入值
         if not text:
-            # 抛出异常，会被 TaskExecutor 捕获并保存为 {"error": "文本内容不能为空"}
             raise CustomException(
-                code=ErrorCode.UNKNOWN_ERROR,
+                code=ErrorCode.INPUT_FORMAT_ERROR,
                 message="文本内容不能为空",
             )
+        if not merchantId:
+            raise CustomException(
+                code=ErrorCode.INPUT_FORMAT_ERROR,
+                message="商户ID不能为空",
+            )
         
+        # 模拟业务处理
         await asyncio.sleep(1)
         await self.update_progress(ProgressUpdate(
             info="正在解析文本内容...",
             status=TaskStatus.RUNNING
         ))
-        
-        # 模拟业务处理
         await asyncio.sleep(1)
         
         # 最终进度更新
@@ -56,7 +61,6 @@ class TextToOrderTask(BaseTask):
         logger.info(f"文本转订单任务完成: task_id={self.task_id}")
         
         # 返回任务结果，这个字典会直接作为 output 保存
-        # TaskExecutor 会将此结果保存到 task.output，并通过回调发送
         return {
             "order_id": "ORD123456",
             "items": [
