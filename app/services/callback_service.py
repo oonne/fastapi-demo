@@ -37,12 +37,12 @@ class CallbackService:
             "taskId": task_id,
             "taskStatus": status.value,
             "progress": progress,
-            "output": json.dumps(output) if output is not None else None
+            "output": json.dumps(output, ensure_ascii=False) if output is not None else None
         }
         
         # 使用固定配置构建回调URL和请求头
         callback_url = settings.callback_domain + "/ai-task/callback-update"
-        callback_headers = {"Content-Type": "application/json"}
+        callback_headers = {"Content-Type": "application/json; charset=utf-8"}
         if settings.callback_key:
             callback_headers["x-api-key"] = settings.callback_key
         

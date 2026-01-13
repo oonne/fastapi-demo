@@ -114,7 +114,7 @@ class TaskExecutor:
                 
                 logger.error(
                     f"任务执行失败: task_id={task_id}, code={e.code}, error={e.message}",
-                    exc_info=True
+                    exc_info=False
                 )
             else:
                 # 普通异常，只保存错误消息
@@ -124,7 +124,7 @@ class TaskExecutor:
                 
                 logger.error(
                     f"任务执行失败: task_id={task_id}, error={error_message}",
-                    exc_info=True
+                    exc_info=False
                 )
                 error_output = {"error": error_message}
             
