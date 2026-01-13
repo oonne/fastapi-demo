@@ -55,12 +55,13 @@ class TextToOrderTask(BaseTask):
             status=TaskStatus.RUNNING
         ))
         
+        # 这是调用LLM模型的示例
         result = await llm_service.invoke(
             ["你好，请介绍一下自己"],
             model_key="qwen-turbo"  # 指定使用 qwen-turbo 模型
         )
         print('result', result)
-        
+
         await asyncio.sleep(1)
         
         # 最终进度更新
