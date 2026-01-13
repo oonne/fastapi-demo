@@ -69,13 +69,14 @@ class TextToOrderTask(BaseTask):
         
         logger.info(f"文本转订单任务完成: task_id={self.task_id}")
         
-        # 返回任务结果，这个字典会直接作为 output 保存
+        # 返回任务结果
         return {
-            "order_id": "ORD123456",
-            "items": [
-                {"name": "商品A", "quantity": 2, "price": 99.00},
-                {"name": "商品B", "quantity": 1, "price": 199.00}
-            ],
-            "total_amount": 397.00,
-            "status": "created"
+            "products": [
+                {
+                    "name": "商品A",
+                    "quantity": 2,
+                    "price": 99.00,
+                    "remark": "商品A的备注",    
+                }
+            ]
         }
