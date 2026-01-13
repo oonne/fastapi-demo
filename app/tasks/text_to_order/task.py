@@ -106,12 +106,10 @@ class TextToOrderTask(BaseTask):
                 message="输出格式错误：'products' 必须是数组"
             )
         
-        # 检查 products 是否为空
+        # 如果 products 为空数组，直接返回（允许空数组）
         if len(output["products"]) == 0:
-            raise CustomException(
-                code=ErrorCode.OUTPUT_FORMAT_ERROR,
-                message="输出格式错误：'products' 数组不能为空"
-            )
+            logger.info(f"未识别到商品信息: task_id={self.task_id}")
+            return {"products": []}
         
         # 规范化每个商品
         normalized_products = []
