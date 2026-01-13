@@ -7,6 +7,7 @@ from app.constant.task_status import TaskStatus
 from app.utils.logger import get_logger
 from app.utils.exceptions import CustomException
 from app.constant.error_code import ErrorCode
+from app.services.llm_service import llm_service
 
 logger = get_logger("app")
 
@@ -53,6 +54,13 @@ class TextToOrderTask(BaseTask):
             info="正在解析文本内容...",
             status=TaskStatus.RUNNING
         ))
+        
+        result = await llm_service.invoke(
+            ["你好，请介绍一下自己"],
+            model_key="qwen-turbo"  # 指定使用 qwen-turbo 模型
+        )
+        print('result', result)
+        
         await asyncio.sleep(1)
         
         # 最终进度更新
