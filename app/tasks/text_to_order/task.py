@@ -377,81 +377,24 @@ class TextToOrderTask(BaseTask):
         ))
         
         try:
-            # 检查文本长度，决定是否需要分块处理
-            text_length = len(text)
-            estimated_tokens = self._estimate_token_count(text)
+            # 使用 prompt 模板格式化输入
+            formatted_prompt = text_to_order_prompt.format(user_input=text)
             
-            logger.info(
-                f"文本长度检查: task_id={self.task_id}, "
-                f"字符数={text_length}, 估算tokens={estimated_tokens}, "
-                f"阈值={self.MAX_INPUT_LENGTH}"
+            logger.debug(f"调用 LLM 解析文本: text={text[:100]}...")
+            
+            # 调用 LLM 模型
+            llm_result = await llm_service.invoke(
+                [{"role": "user", "content": formatted_prompt}],
+                model_key="qwen-plus"  # 此处切换模型
             )
             
-            # 如果文本长度超过阈值，使用分块处理
-            if text_length > self.MAX_INPUT_LENGTH:
-                logger.info(
-                    f"文本长度超过阈值，启用分块处理: task_id={self.task_id}, "
-                    f"文本长度={text_length}, 阈值={self.MAX_INPUT_LENGTH}"
-                )
-                
-                # 将文本分块
-                chunks = self._split_text_into_chunks(text)
-                total_chunks = len(chunks)
-                
-                logger.info(
-                    f"文本已分块: task_id={self.task_id}, "
-                    f"总块数={total_chunks}, 各块长度={[len(c) for c in chunks]}"
-                )
-                
-                # 更新进度
-                await self.update_progress(ProgressUpdate(
-                    info=f"正在处理文本块（共{total_chunks}块）",
-                    status=TaskStatus.RUNNING
-                ))
-                
-                # 处理每个文本块
-                chunk_results = []
-                for idx, chunk in enumerate(chunks):
-                    await self.update_progress(ProgressUpdate(
-                        info=f"正在处理第{idx + 1}/{total_chunks}块",
-                        status=TaskStatus.RUNNING
-                    ))
-                    
-                    chunk_result = await self._process_text_chunk(chunk, idx, total_chunks)
-                    chunk_results.append(chunk_result)
-                    
-                    logger.debug(
-                        f"文本块 {idx + 1}/{total_chunks} 处理完成: "
-                        f"识别到{len(chunk_result.get('products', []))}个商品"
-                    )
-                
-                # 合并所有块的结果
-                validated_output = self._merge_chunk_results(chunk_results)
-                
-                logger.info(
-                    f"分块处理完成: task_id={self.task_id}, "
-                    f"总商品数量={len(validated_output['products'])}"
-                )
-            else:
-                # 文本长度在阈值内，直接处理
-                logger.debug(f"文本长度在阈值内，直接处理: text={text[:100]}...")
-                
-                # 使用 prompt 模板格式化输入
-                formatted_prompt = text_to_order_prompt.format(user_input=text)
-                
-                # 调用 LLM 模型
-                llm_result = await llm_service.invoke(
-                    [{"role": "user", "content": formatted_prompt}],
-                    model_key="qwen-plus"  # 此处切换模型
-                )
-                
-                logger.debug(f"LLM 返回结果: {llm_result[:200]}...")
-                
-                # 从 LLM 返回结果中提取 JSON
-                raw_output = self._extract_json_from_text(llm_result)
-                
-                # 校验并规范化输出格式
-                validated_output = self._validate_output_format(raw_output)
+            logger.debug(f"LLM 返回结果: {llm_result[:200]}...")
+            
+            # 从 LLM 返回结果中提取 JSON
+            raw_output = self._extract_json_from_text(llm_result)
+            
+            # 校验并规范化输出格式
+            validated_output = self._validate_output_format(raw_output)
             
             logger.info(
                 f"文本转订单解析成功: task_id={self.task_id}, "
