@@ -1,5 +1,6 @@
 """回调服务模块"""
 import asyncio
+import json
 from typing import Optional, Dict, Any
 import httpx
 from app.constant.task_status import TaskStatus
@@ -36,7 +37,7 @@ class CallbackService:
             "taskId": task_id,
             "taskStatus": status.value,
             "progress": progress,
-            "output": output
+            "output": json.dumps(output) if output is not None else None
         }
         
         # 使用固定配置构建回调URL和请求头

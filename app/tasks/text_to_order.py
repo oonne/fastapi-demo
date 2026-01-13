@@ -5,6 +5,8 @@ from app.tasks.base import BaseTask
 from app.schemas.task import ProgressUpdate
 from app.constant.task_status import TaskStatus
 from app.utils.logger import get_logger
+from app.utils.exceptions import CustomException
+from app.constant.error_code import ErrorCode
 
 logger = get_logger("app")
 
@@ -16,16 +18,36 @@ class TextToOrderTask(BaseTask):
         """
         执行文本转订单任务
         
+        返回说明：
+        - 成功时：返回的字典会直接作为 output 保存到任务中，并通过回调发送
+        - 失败时：抛出异常，TaskExecutor 会自动捕获并保存为 {"error": "错误信息"}
+        
         Returns:
-            Dict[str, Any]: 任务执行结果（空数据，待补充）
+            Dict[str, Any]: 任务执行结果，会直接作为 output 保存
+            
+        Raises:
+            Exception: 任务执行失败时抛出异常，会被 TaskExecutor 捕获并处理
         """
         logger.info(f"开始执行文本转订单任务: task_id={self.task_id}")
+        
+        # 获取输入参数
+        text = self.task_params.get("text", "")
+        
+        # 异常捕获示例
+        if not text:
+            # 抛出异常，会被 TaskExecutor 捕获并保存为 {"error": "文本内容不能为空"}
+            raise CustomException(
+                code=ErrorCode.UNKNOWN_ERROR,
+                message="文本内容不能为空",
+            )
         
         await asyncio.sleep(1)
         await self.update_progress(ProgressUpdate(
             info="正在解析文本内容...",
             status=TaskStatus.RUNNING
         ))
+        
+        # 模拟业务处理
         await asyncio.sleep(1)
         
         # 最终进度更新
@@ -33,5 +55,14 @@ class TextToOrderTask(BaseTask):
         
         logger.info(f"文本转订单任务完成: task_id={self.task_id}")
         
-        # 返回空数据
-        return {}
+        # 返回任务结果，这个字典会直接作为 output 保存
+        # TaskExecutor 会将此结果保存到 task.output，并通过回调发送
+        return {
+            "order_id": "ORD123456",
+            "items": [
+                {"name": "商品A", "quantity": 2, "price": 99.00},
+                {"name": "商品B", "quantity": 1, "price": 199.00}
+            ],
+            "total_amount": 397.00,
+            "status": "created"
+        }

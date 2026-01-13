@@ -101,20 +101,32 @@ class TaskExecutor:
                 # 删除任务
                 await task_manager_instance.delete_task(task_id)
         
-        except CustomException:
-            # 重新抛出自定义异常
-            raise
-        
         except Exception as e:
             # 5. 执行失败：更新状态为 FAILED，保存错误信息
-            error_message = str(e)
-            await task_manager_instance.update_status(task_id, TaskStatus.FAILED)
-            await task_manager_instance.update_error(task_id, error_message)
-            
-            logger.error(
-                f"任务执行失败: task_id={task_id}, error={error_message}",
-                exc_info=True
-            )
+            # 判断是否是 CustomException，如果是则保存错误码和错误消息
+            if isinstance(e, CustomException):
+                error_output = {
+                    "error": e.message,
+                    "code": e.code
+                }
+                await task_manager_instance.update_status(task_id, TaskStatus.FAILED)
+                await task_manager_instance.update_result(task_id, error_output)
+                
+                logger.error(
+                    f"任务执行失败: task_id={task_id}, code={e.code}, error={e.message}",
+                    exc_info=True
+                )
+            else:
+                # 普通异常，只保存错误消息
+                error_message = str(e)
+                await task_manager_instance.update_status(task_id, TaskStatus.FAILED)
+                await task_manager_instance.update_error(task_id, error_message)
+                
+                logger.error(
+                    f"任务执行失败: task_id={task_id}, error={error_message}",
+                    exc_info=True
+                )
+                error_output = {"error": error_message}
             
             # 获取任务信息用于回调
             task = await task_manager_instance.get_task(task_id)
@@ -123,7 +135,7 @@ class TaskExecutor:
                 await callback_service.callback(
                     task_id=task_id,
                     status=TaskStatus.FAILED,
-                    output={"error": error_message},
+                    output=error_output,
                     progress=task.progress
                 )
                 

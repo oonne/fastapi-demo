@@ -7,6 +7,8 @@ FastApi DEMO
 * 格式化返回
 * API Key 认证
 * 请求外部接口
+* 任务管理
+* langChain
 * 自动部署脚本
 
 ## 使用
