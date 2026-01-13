@@ -16,6 +16,8 @@ class ErrorCode:
     
     # 任务相关错误
     INPUT_FORMAT_ERROR = 20000  # 输入参数格式错误
-    TASK_NOT_FOUND = 20001  # 任务不存在
-    TASK_ID_EXISTS = 20002  # 任务ID已存在
-    TASK_TYPE_NOT_SUPPORTED = 20003  # 不支持的任务类型
+    OUTPUT_FORMAT_ERROR = 20001  # 输出参数格式错误
+    TASK_NOT_FOUND = 20002  # 任务不存在
+    TASK_ID_EXISTS = 20003  # 任务ID已存在
+    TASK_TYPE_NOT_SUPPORTED = 20004  # 不支持的任务类型
+    TASK_EXECUTION_FAILED = 20005  # 任务执行失败
