@@ -48,9 +48,9 @@ class TextToOrderTask(BaseTask):
                 message="商户ID不能为空",
             )
         
-        # 模拟业务处理
+        # 开始处理
         await self.update_progress(ProgressUpdate(
-            info="正在解析文本内容...",
+            info="开始识别订单信息",
             status=TaskStatus.RUNNING
         ))
         
