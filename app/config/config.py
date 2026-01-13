@@ -9,9 +9,12 @@ from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from dotenv import load_dotenv
 
+# 环境变量文件名常量
+ENV_FILE_NAME = ".env"
+
 # 在创建 Settings 实例之前，先加载 .env.local 文件中的所有环境变量到 os.environ
 # 这样即使 Settings 类中没有定义的字段，也能通过 os.getenv() 访问
-env_file = Path(".env.local")
+env_file = Path(ENV_FILE_NAME)
 if env_file.exists():
     load_dotenv(env_file, override=False)  # override=False 表示不覆盖已存在的环境变量
 
@@ -54,12 +57,10 @@ class Settings(BaseSettings):
         },
         description="LLM 多模型配置字典"
     )
-    dashscope_api_key_qwen_turbo: str = ""
-    dashscope_api_key_qwen_plus: str = ""
     
     # 配置读取环境变量
     model_config = SettingsConfigDict(
-        env_file=".env.local",  # 指定 .env 文件
+        env_file=ENV_FILE_NAME,  # 指定 .env 文件
         env_file_encoding="utf-8",
         case_sensitive=False,  # 环境变量名不区分大小写（ENV_NAME 和 env_name 都可以）
         extra="ignore",  # 忽略 .env 文件中未定义的变量
