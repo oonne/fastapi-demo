@@ -75,6 +75,7 @@ class TextToOrderTask(BaseTask):
                 {
                     "name": "商品A",
                     "quantity": 2,
+                    "unit": "个",
                     "price": 99.00,
                     "remark": "商品A的备注",    
                 }
